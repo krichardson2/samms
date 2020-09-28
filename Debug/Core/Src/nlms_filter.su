@@ -1,0 +1,3 @@
+nlms_filter.c:16:6:vec_splitter	32	static
+nlms_filter.c:25:6:sidelobe_math	32	static
+nlms_filter.c:36:6:audio_splitter	32	static
