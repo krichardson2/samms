@@ -1,6 +1,6 @@
 # ADC -> DMA Source Code
 
-Apparently the .IOC files do not open properly in the STM32CubeIDE if pulled from here. The main source code has all the proper initialization within. 
+Apparently the .IOC files do not open properly in the STM32CubeIDE if pulled from here. The main source code has all the proper initialization within. The initialization steps are also outlined [here](https://docs.google.com/document/d/1qkgSoZE3QrpV7r2WLNOdz0vMn0RVLeRlGni07C8RmEA/edit?usp=sharing)
 
 ## Files
 
