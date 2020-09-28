@@ -2,6 +2,13 @@
 
 Apparently the .IOC files do not open properly in the STM32CubeIDE if pulled from here. The main source code has all the proper initialization within. 
 
+## Files
+
+- main.c
+- nlms_filter.c , nlms_filter.h
+- arm_math.h
+
+
 ## Using the CMSIS Libraries
 
 The ARM_MATH_CM4 library is located in \libs and needs to be appended to the library search path in the cubeIDE. 
