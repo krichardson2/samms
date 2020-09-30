@@ -9,9 +9,9 @@ dataout.h
 - SPI2 is configured as Full-Duplex Master
 - Include driver files user_diskio_spi.h and user_diskio_spi.c found here: https://github.com/kiwih/cubemx-mmc-sd-card
 -include this in user code 1:
-//Fatfs object
+<//Fatfs object
 
-FATFS FatFs;
+FATFS FatFs;>
 //File object
 
 FIL fil;
