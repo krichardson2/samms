@@ -21,7 +21,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "fatfs.h"
 #include "usb_device.h"
+#include "dataout.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -161,6 +163,7 @@ int main(void)
   MX_I2C3_Init();
   MX_ADC3_Init();
   MX_SPI2_Init();
+  MX_FATFS_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -742,10 +745,14 @@ void DataoutSDCard06(void *argument)
 {
   /* USER CODE BEGIN DataoutSDCard06 */
   /* Infinite loop */
+  FRESULT* fres = NULL;
+  char write_data[5] = "litty";
   for(;;)
   {
-    osDelay(1);
+	dataout(&USERFatFS, &USERFile, fres, write_data); // write data to SD card
+    osDelay(2000); // check every 2 seconds
   }
+  osThreadTerminate(NULL);
   /* USER CODE END DataoutSDCard06 */
 }
 
