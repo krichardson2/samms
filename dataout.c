@@ -1,6 +1,7 @@
 #include "dataout.h"
+#include <string.h>
 
-void dataout(FATFS *FatFs, FIL *fil, FRESULT *fres)
+void dataout(FATFS *FatFs, FIL *fil, FRESULT *fres, char write_data[])
 {
 	  //Mount drive
 	      *fres = f_mount(FatFs, "", 1); //1=mount now
@@ -53,7 +54,7 @@ void dataout(FATFS *FatFs, FIL *fil, FRESULT *fres)
 	        //error
 	      }
 
-	      strncpy((char*)readBuf, "litty", 5);
+	      strncpy((char*)readBuf, write_data, strlen(write_data)); // what to write out + character amt
 	      UINT bytesWrote;
 	      *fres = f_write(fil, readBuf, 5, &bytesWrote);
 	      if(*fres == FR_OK) {
