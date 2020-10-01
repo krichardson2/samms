@@ -2,6 +2,8 @@
 
 Apparently the .IOC files do not open properly in the STM32CubeIDE if pulled from here. The main source code has all the proper initialization within. The initialization steps are also outlined [here](https://docs.google.com/document/d/1qkgSoZE3QrpV7r2WLNOdz0vMn0RVLeRlGni07C8RmEA/edit?usp=sharing)
 
+I was using 2/4 leds to show the half and complete buffer fills.
+
 ## Files
 
 - main.c
