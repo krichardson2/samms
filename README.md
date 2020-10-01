@@ -19,8 +19,12 @@ FATFS FatFs;>
 FIL fil;
 
 -in user code 2: 
+
 FRESULT fres;
+
 -to call function:
+
 dataout(&FatFs, &fil, &fres);
+
 - if there is a bug in the code before unmounting, remove the SD card and insert it again before launching another debug session
 - file output names must be less than 9 characters
