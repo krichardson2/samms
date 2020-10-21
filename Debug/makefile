@@ -8,6 +8,10 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include Middlewares/Third_Party/FatFs/src/option/subdir.mk
+-include Middlewares/Third_Party/FatFs/src/subdir.mk
+-include FATFS/Target/subdir.mk
+-include FATFS/App/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -30,24 +34,24 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-HopefullyHA.elf \
+DMA_Callback_SDcard.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-HopefullyHA.list \
+DMA_Callback_SDcard.list \
 
 OBJCOPY_BIN += \
-HopefullyHA.bin \
+DMA_Callback_SDcard.bin \
 
 
 # All Target
-all: HopefullyHA.elf secondary-outputs
+all: DMA_Callback_SDcard.elf secondary-outputs
 
 # Tool invocations
-HopefullyHA.elf: $(OBJS) $(USER_OBJS) C:\Users\kyle\STM32CubeIDE\workspace_1.4.0\HopefullyHA\STM32F407VGTX_FLASH.ld
-	arm-none-eabi-gcc -o "HopefullyHA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\kyle\STM32CubeIDE\workspace_1.4.0\HopefullyHA\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="HopefullyHA.map" -Wl,--gc-sections -static -L../libs --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+DMA_Callback_SDcard.elf: $(OBJS) $(USER_OBJS) C:\Users\kyle\STM32CubeIDE\workspace_1.4.0\DMA_Callback_SDcard\STM32F407VGTX_FLASH.ld
+	arm-none-eabi-gcc -o "DMA_Callback_SDcard.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\kyle\STM32CubeIDE\workspace_1.4.0\DMA_Callback_SDcard\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DMA_Callback_SDcard.map" -Wl,--gc-sections -static -L../libs --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -56,13 +60,13 @@ default.size.stdout: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-HopefullyHA.list: $(EXECUTABLES)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "HopefullyHA.list"
+DMA_Callback_SDcard.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "DMA_Callback_SDcard.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-HopefullyHA.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "HopefullyHA.bin"
+DMA_Callback_SDcard.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "DMA_Callback_SDcard.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
