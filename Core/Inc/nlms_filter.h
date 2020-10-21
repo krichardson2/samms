@@ -27,4 +27,4 @@ void vec_splitter(uint32_t *input, uint16_t *left, uint16_t *right, int start, i
 
 void sidelobe_math(int *arr1, int *arr2, int *addition, int *subtraction, int arr_len);
 
-void audio_splitter(uint32_t *adc_buf, uint16_t *sum, uint16_t *diff, int w_pointer, int offset_w_pointer, uint32_t ADC_BUF_LENGTH);
+void audio_splitter(uint32_t *adc_buf, float *sum, float *diff, int w_pointer, int offset_w_pointer, uint32_t ADC_BUF_LENGTH);
