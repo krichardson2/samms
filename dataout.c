@@ -1,64 +1,86 @@
 #include "dataout.h"
-
-void dataout(FATFS *FatFs, FIL *fil, FRESULT *fres)
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+void readSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *userdata)//arr[2], h/l, SPL
 {
 	  //Mount drive
 	      *fres = f_mount(FatFs, "", 1); //1=mount now
 	      if (*fres != FR_OK) {
 	      	//error
+	    	f_mount(NULL, "", 0);
 	        while(1);
 	      }
 
-	      DWORD free_clusters, free_sectors, total_sectors;
-
-	      FATFS* getFreeFs;
-
-	      *fres = f_getfree("", &free_clusters, &getFreeFs);
-	      if (*fres != FR_OK) {
-	      	//error
-	        while(1);
-	      }
-
-	      total_sectors = (getFreeFs->n_fatent - 2) * getFreeFs->csize;
-	      free_sectors = free_clusters * getFreeFs->csize;
-
-
-
-	      //Try to open file
-	      *fres = f_open(fil, "test.txt", FA_READ);
+	      //open file
+	      *fres = f_open(fil, "th.txt", FA_READ);
 	      if (*fres != FR_OK) {
 	        //error
+	    	f_mount(NULL, "", 0);
 	        while(1);
 	      }
 
+	      BYTE readBuf[10];
 
-	      BYTE readBuf[30];
-
-	      //We can either use f_read OR f_gets to get data out of files
-	      //f_gets is a wrapper on f_read that does some string formatting for us
-	      TCHAR* rres = f_gets((TCHAR*)readBuf, 30, fil);
+	      TCHAR* rres = f_gets((TCHAR*)readBuf, 10, fil);
 	      if(rres != 0) {
-	        //read
-	      } else {
-	        //error
+	    	  char *ptr;
+	    	  ptr = strtok (rres,",");
+	    	  //if low threshold, store 0, if high, 1
+	    	  int type;
+	    	  if(*ptr == 'L')
+	    	  {
+	    		  type = 0;//set low thresh
+	    	  }
+	    	  else
+	    	  {
+	    		  type = 1;//set high thresh
+	    	  }
+	    	  // value
+	    	  ptr = strtok(NULL, ",");
+	    	  int value = atoi(ptr);
+
+	    	  userdata[0]= type;
+	    	  userdata[1]= value;
 	      }
 
 	      //Close file, don't forget this!
 	      f_close(fil);
 
-	      *fres = f_open(fil, "file1.txt", FA_WRITE | FA_OPEN_ALWAYS | FA_CREATE_ALWAYS);
-	      if(*fres == FR_OK) {
-	        //opened
-	      } else {
-	        //error
+	      //De-mount drive
+	      f_mount(NULL, "", 0);
+
+
+}
+
+void writeSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *outdata)//arr[24], date, SPL
+{
+	  //Mount drive
+	      *fres = f_mount(FatFs, "", 1); //1=mount now
+	      if (*fres != FR_OK) {
+	      	//error
+	    	f_mount(NULL, "", 0);
+	        while(1);
 	      }
 
-	      strncpy((char*)readBuf, "litty", 5);
+	      //open file
+	      *fres = f_open(fil, "data.txt", FA_WRITE | FA_OPEN_APPEND);
+	      if(*fres != FR_OK){
+	    	f_mount(NULL, "", 0);
+	        while(1);
+	      }
+
+
 	      UINT bytesWrote;
-	      *fres = f_write(fil, readBuf, 5, &bytesWrote);
+	      BYTE writeBuff[24];
+	      strncpy((char*)writeBuff, outdata, strlen(outdata));
+
+	      *fres = f_write(fil, writeBuff, 24, &bytesWrote);
+	      f_sync(fil);//flush buffer
 	      if(*fres == FR_OK) {
 	        //wrote
 	      } else {
+	    	f_mount(NULL, "", 0);
 	        //error
 	      }
 
