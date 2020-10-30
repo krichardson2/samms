@@ -10,6 +10,7 @@
 #ifndef INC_DATAOUT_H_
 #define INC_DATAOUT_H_
 
-void dataout(FATFS *FatFs, FIL *fil, FRESULT *fres);
+void readSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *userdata);
+void writeSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *outdata);
 
 #endif /* INC_DATAOUT_H_ */
