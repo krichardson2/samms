@@ -19,7 +19,14 @@
   */
 /* USER CODE END Header */
 
-//float* nlms_filter();
+#include <stdint.h>
+/*
+ * Function to split 32-bit vector into two 16-bit vectors
+ */
+void vec_splitter(uint32_t *input, uint16_t *left, uint16_t *right, int start, int length);
 
-void sidelobe_math(int *arr1, int *arr2, int *addition, int *subtraction, int arr_len);
+void audio_splitter(uint32_t *adc_buf, float *sum, float *diff, int w_pointer, int offset_w_pointer, uint32_t buf_half_length);
 
+float calc_rms(float *wave, float *rmsState, float *armResult, uint32_t lengthVector, uint32_t overlapBlock);
+
+double calc_SPL(float RMS, uint32_t count);

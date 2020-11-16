@@ -42,7 +42,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+int toggleFlag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,9 +57,12 @@
 
 /* External variables --------------------------------------------------------*/
 extern DMA_HandleTypeDef hdma_adc1;
-extern ADC_HandleTypeDef hadc1;
-extern ADC_HandleTypeDef hadc2;
+extern DMA_HandleTypeDef hdma_spi3_tx;
 /* USER CODE BEGIN EV */
+extern TIM_HandleTypeDef htim2;
+extern int callback_state;
+extern int SPL_FLAG;
+extern int calculating;
 
 /* USER CODE END EV */
 
@@ -200,18 +203,57 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
-  * @brief This function handles ADC1, ADC2 and ADC3 global interrupts.
+  * @brief This function handles EXTI line0 interrupt.
   */
-void ADC_IRQHandler(void)
+void EXTI0_IRQHandler(void)
 {
-  /* USER CODE BEGIN ADC_IRQn 0 */
+  /* USER CODE BEGIN EXTI0_IRQn 0 */
 
-  /* USER CODE END ADC_IRQn 0 */
-  HAL_ADC_IRQHandler(&hadc1);
-  HAL_ADC_IRQHandler(&hadc2);
-  /* USER CODE BEGIN ADC_IRQn 1 */
+  for(int i=0; i<65535; i++);
 
-  /* USER CODE END ADC_IRQn 1 */
+  if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0))
+  {
+	  if (toggleFlag == 0)
+	  {
+		  // TURN TIMER OFF = STOP DMA/ADC Conversions
+		  htim2.Instance->CR1 &= ~TIM_CR1_CEN; // pause timer
+		  htim2.Instance->CNT = 0;
+		  htim2.Instance->SR = (uint16_t)~TIM_FLAG_UPDATE;
+
+		  // CALCULATE SPL
+		  toggleFlag = 1;
+		  SPL_FLAG = 1;
+	  }
+	  else if (toggleFlag == 1)
+	  {
+		  // TURN TIMER ON = START DMA/ADC Conversions
+		  htim2.Instance->CR1 |= TIM_CR1_CEN;
+
+		  toggleFlag = 0;
+		  SPL_FLAG = 0;
+	  }
+	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_14);
+  }
+
+  /* USER CODE END EXTI0_IRQn 0 */
+  HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
+  /* USER CODE BEGIN EXTI0_IRQn 1 */
+
+  /* USER CODE END EXTI0_IRQn 1 */
+}
+
+/**
+  * @brief This function handles DMA1 stream5 global interrupt.
+  */
+void DMA1_Stream5_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Stream5_IRQn 0 */
+
+  /* USER CODE END DMA1_Stream5_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_spi3_tx);
+  /* USER CODE BEGIN DMA1_Stream5_IRQn 1 */
+
+  /* USER CODE END DMA1_Stream5_IRQn 1 */
 }
 
 /**
