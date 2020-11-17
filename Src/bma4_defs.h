@@ -102,7 +102,7 @@
 #endif /* __KERNEL__ */
 
 /**\name CHIP ID ADDRESS*/
-#define BMA4_CHIP_ID_ADDR                        UINT8_C(0x00) // original is 0x00
+#define BMA4_CHIP_ID_ADDR                        UINT8_C(0x30) // original is 0x00
 
 #define BMA456_CHIP_ID							 UINT8_C(0x16) // i added this
 
