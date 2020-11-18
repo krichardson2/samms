@@ -9,7 +9,6 @@ void readSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *userdata)//arr[2], h
 	      if (*fres != FR_OK) {
 	      	//error
 	    	f_mount(NULL, "", 0);
-	        while(1);
 	      }
 
 	      //open file
@@ -17,7 +16,6 @@ void readSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *userdata)//arr[2], h
 	      if (*fres != FR_OK) {
 	        //error
 	    	f_mount(NULL, "", 0);
-	        while(1);
 	      }
 
 	      BYTE readBuf[10];
@@ -53,29 +51,29 @@ void readSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *userdata)//arr[2], h
 
 }
 
-void writeSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *outdata)//arr[24], date, SPL
+void writeSDcard(FATFS *FatFs, FIL *fil, FRESULT *fres, int *outdata)//arr[19], date, SPL
 {
 	  //Mount drive
 	      *fres = f_mount(FatFs, "", 1); //1=mount now
 	      if (*fres != FR_OK) {
 	      	//error
 	    	f_mount(NULL, "", 0);
-	        while(1);
 	      }
 
-	      //open file
-	      *fres = f_open(fil, "data.txt", FA_WRITE | FA_OPEN_APPEND);
+	      //open file based on week
+	      char filename[14];
+	      sprintf(filename,"data_%i%i_%i%i.txt",outdata[0],outdata[1],outdata[6],outdata[7]);
+	      *fres = f_open(fil, filename, FA_WRITE | FA_OPEN_APPEND);
 	      if(*fres != FR_OK){
 	    	f_mount(NULL, "", 0);
-	        while(1);
 	      }
 
 
 	      UINT bytesWrote;
-	      BYTE writeBuff[24];
+	      BYTE writeBuff[19];
 	      strncpy((char*)writeBuff, outdata, strlen(outdata));
 
-	      *fres = f_write(fil, writeBuff, 24, &bytesWrote);
+	      *fres = f_write(fil, writeBuff, 19, &bytesWrote);
 	      f_sync(fil);//flush buffer
 	      if(*fres == FR_OK) {
 	        //wrote
